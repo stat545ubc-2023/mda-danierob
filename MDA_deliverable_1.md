@@ -131,11 +131,12 @@ understand your data.
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: vancouver_trees  
+__1: vancouver_trees  
 2: parking_meters  
 3: flow_sample  
-4: steam_games  
+4: steam_games__
 
+  
 <!----------------------------------------------------------------------------->
 
 1.2 **(6 points)** One way to narrowing down your selection is to
@@ -161,16 +162,26 @@ glimpse(steam_games)
 ```
 # Attribute 2: Using top_n() to sample first 10 rows of table for particular variable of interest.
 top_n(vancouver_trees, 10, common_name)
-top_n(parking_meters, 10)
-top_n(flow_sample, 10)
-top_n(steam_games, 10)
+top_n(parking_meters, 10, geo_local_area)
+top_n(flow_sample, 10, flow)
+top_n(steam_games, 10, developer)
 ```
 ```
-# Attribute 3: Using count() to determine how many samples of different categories for a particular variable of interest.
-count(vancouver_trees, common_name)
-count(parking_meters)
-count(flow_sample)
-count(steam_games)
+# Attribute 3: Using count() and/or arrange(desc()) to determine how many samples in leading categories for a particular variable of interest.
+vancouver_trees %>% 
+  count(genus_name) %>% 
+  arrange(desc(n))  
+
+parking_meters %>% 
+  count(geo_local_area) %>% 
+  arrange(desc(n))  
+
+flow_sample %>% 
+  arrange(desc(flow))  
+
+steam_games %>% 
+  count(developer) %>% 
+  arrange(desc(n))
 ```
 <!----------------------------------------------------------------------------->
 
@@ -179,6 +190,10 @@ initially most interested in, let’s narrow it down to 1. What lead you
 to choose this one? Briefly explain your choice below.
 
 <!-------------------------- Start your work below ---------------------------->
+
+__I will be selecting the vancouver_trees dataset. I study forestry and am most interested intrinsically, and
+I think there are mulitple different variables of interest to evaluate the relationships between.__
+
 <!----------------------------------------------------------------------------->
 
 1.4 **(2 points)** Time for a final decision! Going back to the
@@ -189,6 +204,11 @@ think of 1 research question that you would want to answer with your
 dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
+
+__My immediate idea is evaluating the relationship between DBH and species/genus. This is similair to data analysis
+that might take place during any forestry survey and it will be interesting to see what kind of trees are the largest
+in Vancouver. Dominant species/genus will likely be my categorical explanatory variable while DBH will be continuous response variable.__
+
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -254,6 +274,19 @@ to your data (in other words, why does it make sense to do that?), and
 sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+```
+# Excercise 7: Creating a new tibble to isolate the variable of interest and make the data more manageable.
+trees_tbl <- select(vancouver_trees, genus_name, diameter, date_planted)
+# Before using as_tibble to convert to a tibble I used class() and found that it was already a tibble. 
+class(trees_tbl)  
+```
+```
+# Excercise 1: Determining the distribution of the numeric variable (diameter) to start wrapping my head
+# around the data and considering what kind of relationships may be present and what analysis might be required.
+
+
+```
+
 <!----------------------------------------------------------------------------->
 
 # Task 3: Choose research questions
