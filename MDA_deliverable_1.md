@@ -132,9 +132,9 @@ understand your data.
 <!-------------------------- Start your work below ---------------------------->
 
 1: vancouver_trees  
-2: parking_meters
-3: flow_sample
-4: steam_games
+2: parking_meters  
+3: flow_sample  
+4: steam_games  
 
 <!----------------------------------------------------------------------------->
 
@@ -152,7 +152,25 @@ comments outside of the code chunk?
 <!-------------------------- Start your work below ---------------------------->
 
 ```
-
+# Attribute 1: Using glimpse() to get the dimensions of the table, the class of variables, and sample of top rows.
+glimpse(vancouver_trees)
+glimpse(parking_meters)
+glimpse(flow_sample)
+glimpse(steam_games)
+```
+```
+# Attribute 2: Using top_n() to sample first 10 rows of table for particular variable of interest.
+top_n(vancouver_trees, 10, common_name)
+top_n(parking_meters, 10)
+top_n(flow_sample, 10)
+top_n(steam_games, 10)
+```
+```
+# Attribute 3: Using count() to determine how many samples of different categories for a particular variable of interest.
+count(vancouver_trees, common_name)
+count(parking_meters)
+count(flow_sample)
+count(steam_games)
 ```
 <!----------------------------------------------------------------------------->
 
