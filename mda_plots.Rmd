@@ -329,10 +329,13 @@ __Data Exploration 4__
 ```{r}
 # Following exercise 4: Assess the relationship between two variables. We'll look at diameter and neighborhood.
 ggplot(trees_tbl, aes(x = neighbourhood_name, y = diameter))+
-  geom_boxplot()+ 
-  theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1))+
-  labs(x = "Neighborhood", y = "Diameter", title = "Diameter by Neighborhood")+
-  theme_bw()
+  geom_boxplot(alpha = .5, aes(color = neighbourhood_name))+ 
+  scale_x_discrete(label = function(x) stringr::str_trunc(x, 9))+
+  theme(axis.text.x = element_text(angle = 90), legend.position = "none")+
+  labs(x = "Neighborhood", y = "Diameter", title = "Diameter by Neighborhood")
+```
+```
+Upon firest glance, average DBH appears to be quite similair among the different neighborhoods, thought there is some clear variation (downtown has notably smaller trees).
 
 ```
 <!----------------------------------------------------------------------------->
