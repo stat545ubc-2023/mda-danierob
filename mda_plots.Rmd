@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 Mini Data-Analysis Deliverable 1
 ================
 
@@ -9,13 +14,17 @@ And hopefully the first of many. Let’s get started:
     package by typing the following into your **R terminal**:
 
 <!-- -->
-
-    install.packages("devtools")
-    devtools::install_github("UBC-MDS/datateachr")
+```
+install.packages("devtools")
+devtools::install_github("UBC-MDS/datateachr")
+```
 
 2.  Load the packages below.
 
-`{r} library(datateachr) library(tidyverse)`
+```{r} 
+library(datateachr) 
+library(tidyverse)
+```
 
 3.  Make a repository in the <https://github.com/stat545ubc-2023>
     Organization. You can do this by following the steps found on canvas
@@ -274,22 +283,58 @@ to your data (in other words, why does it make sense to do that?), and
 sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
-```
+
+__Data Exploration 1:__
+```{r}
 # Excercise 7: Creating a new tibble to isolate the variable of interest and make the data more manageable.
-trees_tbl <- select(vancouver_trees, genus_name, diameter, date_planted)
+head(vancouver_trees)
+trees_tbl <- select(vancouver_trees, genus_name, diameter, neighbourhood_name, common_name, date_planted )
+top_n(trees_tbl, 5)
 # Before using as_tibble to convert to a tibble I used class() and found that it was already a tibble. 
 class(trees_tbl)  
 ```
+
+__Data Exploration 2:__
+```{r}
+# Excercise 1: Determining the distribution of the numeric variable (diameter) to start wrapping my head around the data and considering what kind of relationships may be present and what analysis might be required.
 ```
-# Excercise 1: Determining the distribution of the numeric variable (diameter) to start wrapping my head
-# around the data and considering what kind of relationships may be present and what analysis might be required.
-```
-```
+```{r}
 ggplot(trees_tbl, aes(diameter)) +
 geom_histogram()
+```
+```{r}
+#looks like a left-skewed distribution, but the scale is way too big, so there may be outliers. Going to investigate max values of diameter using arrange(desc())to ensure there are no apparent data entry errors.
+
+arrange(trees_tbl, desc(diameter))
+
+```
+```{r}
+#Wow, there's a lot of funny business, several trees have diameters over 100 (inches), and the three largest were planted in the last 30 years, so there is definitely some erroneous data here. We'll remove the trees that are greater than 100 inch diameter in in the next step...
+```
+
+__Data Exploration 3__
+
+```{r}
+# Following excercise 5, we will use filter() to remove the outliers (greater than 100 inches):
+
+trees_tbl <- filter(trees_tbl, diameter < 100 )
+
+#And now our largest diameters are 99:
+arrange(trees_tbl, desc(diameter))
 
 ```
 
+__Data Exploration 4__
+
+```{r}
+# Following exercise 4: Assess the relationship between two variables. We'll look at diameter and neighborhood.
+ggplot(trees_tbl, aes(x = neighbourhood_name, y = diameter))+
+  geom_boxplot()+ 
+  theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1))+
+  labs(x = "Neighborhood", y = "Diameter", title = "Diameter by Neighborhood")+
+  theme_bw()
+
+```
 <!----------------------------------------------------------------------------->
 
 # Task 3: Choose research questions
@@ -301,6 +346,18 @@ research question that interested you (Task 1.4). Now it’s time to pick
 Write the 4 questions and any additional comments below.
 
 <!--- *****START HERE***** --->
+
+  __4 Potential Research Questions:__  
+  
+* How does average tree diameter vary by neighborhood?  
+ 
+* How does average tree diameter vary species?  
+ 
+* How does tree species distribution vary by neighborhood?  
+
+* Which species is the fastest growing? (determine plant age from plant date and compare across species)
+  
+  
 <!----------------------------->
 
 # Overall reproducibility/Cleanliness/Coherence Checklist
@@ -369,3 +426,4 @@ You’ve tagged a release for Milestone 1.
 
 Thanks to Icíar Fernández Boyano for mostly putting this together, and
 Vincenzo Coia for launching.
+
