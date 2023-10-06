@@ -283,61 +283,88 @@ to your data (in other words, why does it make sense to do that?), and
 sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+<br>
 
-__Data Exploration 1:__
+### Exploring My Dataset
+
+#### 2.1: Exploring the data with 4 exercises
+<br>
+
+##### __Data Exploration 1__
+
+Exercise 7: Creating a new tibble to isolate the variable of interest and make the data more manageable:
+
 ```{r}
-# Excercise 7: Creating a new tibble to isolate the variable of interest and make the data more manageable.
 head(vancouver_trees)
 trees_tbl <- select(vancouver_trees, genus_name, diameter, neighbourhood_name, common_name, date_planted )
 top_n(trees_tbl, 5)
 # Before using as_tibble to convert to a tibble I used class() and found that it was already a tibble. 
 class(trees_tbl)  
 ```
+<br>
 
-__Data Exploration 2:__
-```{r}
-# Excercise 1: Determining the distribution of the numeric variable (diameter) to start wrapping my head around the data and considering what kind of relationships may be present and what analysis might be required.
-```
+##### __Data Exploration 2__
+
+Exercise 1: Determining the distribution of the numeric variable (diameter) to start wrapping my head around the data and considering what kind of relationships may be present and what analysis might be required:
+
 ```{r}
 ggplot(trees_tbl, aes(diameter)) +
 geom_histogram()
 ```
-```{r}
-#looks like a left-skewed distribution, but the scale is way too big, so there may be outliers. Going to investigate max values of diameter using arrange(desc())to ensure there are no apparent data entry errors.
 
+Looks like a left-skewed distribution, but the scale is way too big, so there may be outliers. Going to investigate max values of diameter using arrange(desc())to ensure there are no apparent data entry errors.
+
+```{r}
 arrange(trees_tbl, desc(diameter))
 
 ```
+
+Wow, there's a lot of funny business, several trees have diameters over 100 (inches), and the three largest were planted in the last 30 years, so there is definitely some erroneous data here. We'll remove the trees that are greater than 100 inch diameter in in the next step...  
+<br>
+
+##### __Data Exploration 3__
+
+Exercise 5: We will use filter() to remove the outliers (greater than 100 inches):
+
 ```{r}
-#Wow, there's a lot of funny business, several trees have diameters over 100 (inches), and the three largest were planted in the last 30 years, so there is definitely some erroneous data here. We'll remove the trees that are greater than 100 inch diameter in in the next step...
-```
-
-__Data Exploration 3__
-
-```{r}
-# Following excercise 5, we will use filter() to remove the outliers (greater than 100 inches):
-
 trees_tbl <- filter(trees_tbl, diameter < 100 )
 
 #And now our largest diameters are 99:
 arrange(trees_tbl, desc(diameter))
 
 ```
+<br>
 
-__Data Exploration 4__
+##### __Data Exploration 4__
+
+
+Exercise 4: Assess the relationship between two variables. We'll look at diameter and neighborhood:
 
 ```{r}
-# Following exercise 4: Assess the relationship between two variables. We'll look at diameter and neighborhood.
 ggplot(trees_tbl, aes(x = neighbourhood_name, y = diameter))+
   geom_boxplot(alpha = .5, aes(color = neighbourhood_name))+ 
   scale_x_discrete(label = function(x) stringr::str_trunc(x, 9))+
   theme(axis.text.x = element_text(angle = 90), legend.position = "none")+
   labs(x = "Neighborhood", y = "Diameter", title = "Diameter by Neighborhood")
 ```
-```
-Upon firest glance, average DBH appears to be quite similair among the different neighborhoods, thought there is some clear variation (downtown has notably smaller trees).
+  
+Upon first glance, average DBH appears to be quite similar among the different neighborhoods, thought there is some clear variation (downtown has notably smaller trees).  
 
-```
+<br>
+
+#### 2.2: Justifying exercise decisions
+<br>
+
+__1)__ I chose exercise 7 to create a smaller tibble than the original vancouver_trees tibble because there were several columns making it difficult to visualize the data. I selected the five variables that I am most interested in comparing the relationships between.  
+
+__2)__ Next, I followed exercise 1 to plot the distribution of the continuous variable, diameter. The histogram helped to visualize the general tendency of the data which is left skewed, and made the outliers apparent.  
+
+__3)__ After recognizing the presence of outliers, I decided to use exercise 5 to filter rows by diameters grater than 100 and remove outliers. Trees can certainly get larger than 100 inches here in Vancouver, but many of the trees larger than 100 inches had planting dates within the last 30 years, so given the limited infomration I have on data collection and the abundance of outliers I just set a cutoff of 100 DBH so as to move on with analysis.  
+
+__4)__ Last, I followed exercise 4 to begin assessing the relationships between variables. I created a boxplot comparing tree diameters by neighborhood. This plot helps to visualize data and make plans for further analysis. Mean DBH appears similar across neighborhoods but there are definite deviations to explore. 
+
+<br>
+
 <!----------------------------------------------------------------------------->
 
 # Task 3: Choose research questions
