@@ -15,7 +15,6 @@ __mda_deliverable.Rmd__ is an R markdown file that was originally downloaded fro
 * Click "Version Control"  
 * Click "Git"  
 * Paste the Repository URL for the code you would like to run into the "Repository URL" box  
-* For example, here is the Link for Our GitHub Repository  
 * Click "Create Project"  
 * Under the "Files" tab you can select whichever file of code you would like to run    
 * You can now run our code in RStudio!  
