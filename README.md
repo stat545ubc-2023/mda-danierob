@@ -11,6 +11,8 @@ __mda_deliverable.Rmd__ is an R markdown file that was originally downloaded fro
 
 __mda_deliverable2.Rmd__ is an R markdown file that was originally downloaded from the STAT 545 website to serve as the template for the mini data analysis. This file is where all data analysis will take place. (Due 25 Oct. 2023)
 
+__output__ folder location for all files created during data analysis.
+
 # How to run the code:  
 * Open RStudio  
 * Click "File" in the upper lefthand corner  
