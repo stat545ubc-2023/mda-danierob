@@ -587,6 +587,52 @@ data, one for each research question.)
 
 <!--------------------------- Start your work below --------------------------->
 
+For each research question we should be able to work with a table
+similar to the one created in answering q4 (from step 1.2). I will
+recreate the body of the table here, but several more functions were
+used in data manipulation throughout question 1:
+
+``` r
+#first we will get the table that we want to work with all clean and nice.
+
+#creating trees_analysis table of number of trees for each species by neighborhood. "other" category created for trees with less than 10 individuals for a given neighborhood.
+trees_analysis <- trees_tbl %>% 
+  group_by(common_name, neighbourhood_name) %>% 
+  summarize(dbh = mean(diameter), height = mean(height_class), species_count = n()) %>% 
+mutate(common_name = case_when(species_count < 10 ~ "OTHER", TRUE ~ common_name))
+
+
+#adding all "other" species together and adding "proportion" column
+trees_analysis <- trees_analysis %>% 
+  group_by(neighbourhood_name, common_name)%>% 
+  summarize(species_count = sum(species_count), dbh = mean(dbh), height = mean(height)) %>%
+  mutate(proportion = species_count/ sum(species_count)) %>%
+  arrange(neighbourhood_name, species_count)
+
+trees_analysis
+```
+
+    ## # A tibble: 2,473 × 6
+    ## # Groups:   neighbourhood_name [22]
+    ##    neighbourhood_name common_name          species_count   dbh height proportion
+    ##    <chr>              <chr>                        <int> <dbl>  <dbl>      <dbl>
+    ##  1 ARBUTUS-RIDGE      BAILEY SELECT CHOKE…            10  3      1       0.00193
+    ##  2 ARBUTUS-RIDGE      BIGLEAF MAPLE                   10 31.0    7       0.00193
+    ##  3 ARBUTUS-RIDGE      DEODAR CEDAR                    10 22.5    5       0.00193
+    ##  4 ARBUTUS-RIDGE      WILDFIRE BLACK GUM              10  3      1       0.00193
+    ##  5 ARBUTUS-RIDGE      HALKA HONEYLOCUST               11  4.82   1.73    0.00213
+    ##  6 ARBUTUS-RIDGE      MAPLE SPECIES                   11 13.7    3.27    0.00213
+    ##  7 ARBUTUS-RIDGE      RED OAK                         11 31.3    5.55    0.00213
+    ##  8 ARBUTUS-RIDGE      SERVICEBERRY                    11  4.64   2.64    0.00213
+    ##  9 ARBUTUS-RIDGE      FERNLEAF BEECH                  12  3      1       0.00232
+    ## 10 ARBUTUS-RIDGE      GIANT DOGWOOD                   12  3.17   1.25    0.00232
+    ## # ℹ 2,463 more rows
+
+This table is trim and tidy with only the necessary columns for asking
+these two research questions. DBH and height class have been averaged by
+species within each neighbourhood for ~3000 rows, compared to the
+~150,000 of the original data. Ready for modelling.
+
 # Task 3: Modelling
 
 ## 3.0 (no points)
@@ -626,22 +672,6 @@ specifics in STAT 545.
 <!-------------------------- Start your work below ---------------------------->
 
 ``` r
-#first we will get the table that we want to work with all clean and nice.
-
-#creating trees_analysis table of number of trees for each species by neighborhood. "other" category created for trees with less than 10 individuals for a given neighborhood.
-trees_analysis <- trees_tbl %>% 
-  group_by(common_name, neighbourhood_name) %>% 
-  summarize(dbh = mean(diameter), height = mean(height_class), species_count = n()) %>% 
-mutate(common_name = case_when(species_count < 10 ~ "OTHER", TRUE ~ common_name))
-
-
-#adding all "other" species together and adding "proportion" column
-trees_analysis <- trees_analysis %>% 
-  group_by(neighbourhood_name, common_name)%>% 
-  summarize(species_count = sum(species_count), dbh = mean(dbh), height = mean(height)) %>%
-  mutate(proportion = species_count/ sum(species_count)) %>% 
-  arrange(neighbourhood_name, species_count)
-
 #creating a model
 lm <- lm(dbh ~ height, data = trees_analysis)
 summary(lm)
